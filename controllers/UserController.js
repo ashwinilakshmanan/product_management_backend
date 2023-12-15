@@ -17,3 +17,23 @@ export const registerUser = async(req,res)=>{
         res.status(500).json({message: error.message})
     }
 }
+
+//login user
+export const loginUser = async(req,res)=>{
+    const {email,password} = req.body
+
+    try {
+
+        const user = await UserModel.findOne({email: email})
+        if(user){
+            const validity = await bcrypt.compare(password, user.password)
+            validity ? res.status(200).json(user) : res.status(400).json("wrong password")
+        }
+        else{
+            res.status(404).json("User does not exists")
+        }
+        
+    } catch (error) {
+        res.status(500).json({message: error.message})
+    }
+}
