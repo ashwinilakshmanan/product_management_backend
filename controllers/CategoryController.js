@@ -57,3 +57,22 @@ export const updateCategoryController = async (req, res) => {
     });
   }
 };
+
+//get all categories
+export const getAllCategoriesController = async (req, res) => {
+  try {
+    const category = await CategoryModel.find({});
+    res.status(200).send({
+      success: true,
+      message: "All categories list",
+      category,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error while getting all category",
+    });
+  }
+};
