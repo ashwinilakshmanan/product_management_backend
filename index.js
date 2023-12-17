@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import UserRoute from "./routes/UserRoute.js";
 import CategoryRoute from "./routes/CategoryRoute.js";
+import SubCategoryRoute from './routes/SubCategoryRoute.js'
 
 const app = express();
 
@@ -27,4 +28,5 @@ mongoose
 
 //routes
 app.use("/api", UserRoute);
-app.use("/api/category", CategoryRoute);
+app.use("/api", CategoryRoute);
+app.use("/api",SubCategoryRoute)
