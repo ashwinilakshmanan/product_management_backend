@@ -3,23 +3,28 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import UserRoute from "./routes/UserRoute.js";
+import CategoryRoute from "./routes/CategoryRoute.js";
 
 const app = express();
 
 // environment variable
-dotenv.config()
+app.use(bodyParser.json({ limit: "30mb", extended: true }));
+app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+dotenv.config();
 
 //mongodb connection
-mongoose.connect(
-  `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.v44gp4t.mongodb.net/${process.env.MONGO_DB_DATABASE}?retryWrites=true&w=majority`,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
+mongoose
+  .connect(
+    `mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASSWORD}@cluster0.v44gp4t.mongodb.net/${process.env.MONGO_DB_DATABASE}?retryWrites=true&w=majority`,
+    { useNewUrlParser: true, useUnifiedTopology: true }
+  )
+  .then(() =>
+    app.listen(process.env.PORT, () =>
+      console.log(`Listening at ${process.env.PORT} `)
+    )
+  )
+  .catch((error) => console.log(error));
 
-app.use(bodyParser());
+//routes
 app.use("/api", UserRoute);
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
-});
+app.use("/api/category", CategoryRoute);
